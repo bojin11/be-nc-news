@@ -28,3 +28,14 @@ exports.fetchArticleFromArticleId = (id) => {
     }
   });
 };
+
+exports.fetchArticles = () => {
+  let SQLString = "SELECT * FROM articles";
+  return db.query(SQLString).then((result) => {
+    if (result.length === 0) {
+      return Promise.reject();
+    } else {
+      return result.rows;
+    }
+  });
+};

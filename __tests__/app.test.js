@@ -78,3 +78,26 @@ describe("GET /api/articles/1", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+  test("responds with 200 and an array of objects which have required properties", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toEqual(13);
+        body.articles.forEach((element) => {
+          expect(element).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+          });
+        });
+      });
+  });
+});

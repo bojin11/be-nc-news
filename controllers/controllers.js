@@ -2,6 +2,7 @@ const {
   fetchEndPoints,
   fetchTopics,
   fetchArticleFromArticleId,
+  fetchArticles,
 } = require("../models/models");
 
 exports.getEndPoints = (req, res) => {
@@ -28,5 +29,16 @@ exports.getArticleFromArticleId = (req, res, next) => {
     })
     .catch((err) => {
       res.status(404).send({ msg: "article does not exist" });
+    });
+};
+
+exports.getArticles = (req, res, next) => {
+  fetchArticles()
+    .then((result) => {
+      res.send({ articles: result });
+    })
+    .catch((err) => {
+      console.error("Error fetching articles:", err);
+      next(err);
     });
 };
