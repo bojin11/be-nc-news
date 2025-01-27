@@ -17,3 +17,14 @@ exports.fetchTopics = () => {
       throw err;
     });
 };
+
+exports.fetchArticleFromArticleId = (id) => {
+  let SQLString = `SELECT * FROM articles WHERE article_id = ${id}`;
+  return db.query(SQLString).then((result) => {
+    if (result.rows.length === 0) {
+      return Promise.reject();
+    } else {
+      return result.rows;
+    }
+  });
+};
