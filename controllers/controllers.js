@@ -6,6 +6,7 @@ const {
   fetchArticles,
   fetchArticleComments,
   postComment,
+  updateArticleById,
 } = require("../models/models");
 
 exports.getEndPoints = (req, res) => {
@@ -76,4 +77,24 @@ exports.addComment = (req, res, next) => {
       console.error("Error posting comment", err);
       next(err);
     });
+};
+
+exports.updateArticleVotes = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+
+  if (typeof inc_votes !== "number") {
+    return res
+      .status(400)
+      .json({ error: "Bad Request: inc_votes must be a number" });
+  }
+
+  updateArticleById(article_id, inc_votes)
+    .then((updatedArticle) => {
+      if (!updatedArticle) {
+        return res.status(404).json({ error: "Article not found" });
+      }
+      res.status(200).json({ article: updatedArticle });
+    })
+    .catch(next);
 };

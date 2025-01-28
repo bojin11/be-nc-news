@@ -156,3 +156,38 @@ describe("POST /api/articles/1/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("should update the votes of the article by the given amount and respond with the updated article", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 1 }) // Increment the votes by 1
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            article_id: 1,
+            votes: expect.any(Number), // Updated vote count should be a number
+          })
+        );
+      });
+  });
+  test("should respond with 400 if inc_votes is not a number", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: "not_a_number" }) // Invalid input
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.error).toBe("Bad Request: inc_votes must be a number");
+      });
+  });
+  test("should respond with 404 if article_id does not exist", () => {
+    return request(app)
+      .patch("/api/articles/9999") // Non-existing article_id
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.error).toBe("Article not found");
+      });
+  });
+});
