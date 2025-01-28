@@ -1,8 +1,10 @@
+const comments = require("../db/data/test-data/comments");
 const {
   fetchEndPoints,
   fetchTopics,
   fetchArticleFromArticleId,
   fetchArticles,
+  fetchArticleComments,
 } = require("../models/models");
 
 exports.getEndPoints = (req, res) => {
@@ -40,5 +42,16 @@ exports.getArticles = (req, res, next) => {
     .catch((err) => {
       console.error("Error fetching articles:", err);
       next(err);
+    });
+};
+
+exports.getArticleComments = (req, res, next) => {
+  const article_id = req.params.article_id;
+  fetchArticleComments(article_id)
+    .then((result) => {
+      res.send({ comments: result });
+    })
+    .catch((err) => {
+      res.status(404).send({ msg: "article does not exist" });
     });
 };

@@ -39,3 +39,14 @@ exports.fetchArticles = () => {
     }
   });
 };
+
+exports.fetchArticleComments = (id) => {
+  let SQLString = `SELECT * FROM comments JOIN articles ON articles.article_id = comments.article_id where articles.article_id = ${id}`;
+  return db.query(SQLString).then((result) => {
+    if (result.rows.length === 0) {
+      return Promise.reject();
+    } else {
+      return result.rows;
+    }
+  });
+};
