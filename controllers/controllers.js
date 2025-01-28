@@ -5,6 +5,7 @@ const {
   fetchArticleFromArticleId,
   fetchArticles,
   fetchArticleComments,
+  postComment,
 } = require("../models/models");
 
 exports.getEndPoints = (req, res) => {
@@ -53,5 +54,26 @@ exports.getArticleComments = (req, res, next) => {
     })
     .catch((err) => {
       res.status(404).send({ msg: "article does not exist" });
+    });
+};
+
+exports.addComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { author, body } = req.body || {};
+
+  if (!author || !body) {
+    return res
+      .status(400)
+      .send({ status: 400, msg: "author and body are required" });
+  }
+  postComment(article_id, author, body)
+    .then(() => {
+      res.status(201).send({
+        comment: { author: author, body: body },
+      });
+    })
+    .catch((err) => {
+      console.error("Error posting comment", err);
+      next(err);
     });
 };
