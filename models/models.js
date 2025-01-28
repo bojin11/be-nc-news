@@ -50,3 +50,16 @@ exports.fetchArticleComments = (id) => {
     }
   });
 };
+
+exports.postComment = (article_id, author, body) => {
+  return db
+    .query(
+      `INSERT INTO comments (article_id, author, body, created_at)
+    VALUES ($1, $2, $3, NOW()) RETURNING *`,
+      [article_id, author, body]
+    )
+    .catch((err) => {
+      console.error("Database error:", err);
+      throw err;
+    });
+};

@@ -132,3 +132,27 @@ describe("GET /api/articles/1/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/1/comments", () => {
+  test("201: Responds with the posted comment", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ author: "butter_bridge", body: "Great article!" })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment).toEqual({
+          author: "butter_bridge",
+          body: "Great article!",
+        });
+      });
+  });
+  test("400: Responds with an error when missing required fields", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ author: "butter_bridge" }) // Missing the `body`
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("author and body are required");
+      });
+  });
+});
