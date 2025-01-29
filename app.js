@@ -7,6 +7,7 @@ const {
   getArticleComments,
   addComment,
   updateArticleVotes,
+  deleteCommentById,
 } = require("./controllers/controllers");
 const app = express();
 
@@ -19,6 +20,7 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getArticleComments);
 app.post("/api/articles/:article_id/comments", addComment);
 app.patch("/api/articles/:article_id", updateArticleVotes);
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.use((err, req, res, next) => {
   console.error("Error stack:", err.stack);

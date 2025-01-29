@@ -77,3 +77,17 @@ exports.updateArticleById = (article_id, inc_votes) => {
       return rows[0];
     });
 };
+
+exports.deleteComment = (comment_id) => {
+  return db
+    .query(
+      `DELETE from comments
+      WHERE comment_id = $1
+      RETURNING *;`,
+      [comment_id]
+    )
+    .catch((err) => {
+      console.error("Database error:", err);
+      throw err;
+    });
+};

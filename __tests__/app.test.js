@@ -191,3 +191,9 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("should delete the comment by the given comment_id and response status code 204", () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+});
