@@ -29,9 +29,32 @@ exports.fetchArticleFromArticleId = (id) => {
   });
 };
 
-exports.fetchArticles = () => {
+exports.fetchArticles = (queries) => {
+  const sort_by = queries.sort_by;
+  const order = queries.order;
   let SQLString = "SELECT * FROM articles";
-  return db.query(SQLString).then((result) => {
+  args = [];
+
+  const greenList = [
+    "title",
+    "topic",
+    "author",
+    "body",
+    "created_at",
+    "votes",
+    "article_img_url",
+  ];
+
+  if (greenList.includes(sort_by)) {
+    SQLString += ` ORDER BY $1`;
+    args.push(sort_by);
+
+    if (order === "desc" || order === "asc") {
+      SQLString += " " + order;
+    }
+  }
+
+  return db.query(SQLString, args).then((result) => {
     if (result.length === 0) {
       return Promise.reject();
     } else {
