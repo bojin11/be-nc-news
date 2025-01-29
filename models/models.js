@@ -91,3 +91,15 @@ exports.deleteComment = (comment_id) => {
       throw err;
     });
 };
+
+exports.fetchUsers = () => {
+  return db
+    .query("SELECT * FROM users")
+    .then((result) => {
+      return result.rows;
+    })
+    .catch((err) => {
+      console.error("Database error:", err);
+      throw err;
+    });
+};
