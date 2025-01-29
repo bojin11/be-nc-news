@@ -8,6 +8,7 @@ const {
   postComment,
   updateArticleById,
   deleteComment,
+  fetchUsers,
 } = require("../models/models");
 
 exports.getEndPoints = (req, res) => {
@@ -109,6 +110,17 @@ exports.deleteCommentById = (req, res, next) => {
     })
     .catch((err) => {
       console.error("Error delete comment", err);
+      next(err);
+    });
+};
+
+exports.getUsers = (req, res, next) => {
+  fetchUsers()
+    .then((result) => {
+      res.send({ users: result });
+    })
+    .catch((err) => {
+      console.error("Error fetching users:", err);
       next(err);
     });
 };
