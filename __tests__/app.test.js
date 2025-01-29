@@ -217,3 +217,49 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("/api/articles?sort_by=created_at", () => {
+  test("responds with 200 and an array of objects which have required properties and sorted by treasure_name", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toEqual(13);
+        body.articles.forEach((element) => {
+          expect(element).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+          });
+        });
+      });
+  });
+});
+
+describe("/api/articles?sort_by=created_at&order=desc", () => {
+  test("responds with 200 and an array of objects which have required properties and sorted by treasure_name", () => {
+    return request(app)
+      .get("/api/articles?sort_by=created_at&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toEqual(13);
+        body.articles.forEach((element) => {
+          expect(element).toMatchObject({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+          });
+        });
+      });
+  });
+});
