@@ -29,11 +29,14 @@ exports.fetchArticleFromArticleId = (id) => {
   });
 };
 
-exports.fetchArticles = (queries) => {
-  const sort_by = queries.sort_by;
-  const order = queries.order;
+exports.fetchArticles = ({ sort_by = "created_at", order = "desc", topic }) => {
   let SQLString = "SELECT * FROM articles";
   args = [];
+
+  if (topic) {
+    SQLString += ` WHERE topic = $2`;
+    args.push(topic);
+  }
 
   const greenList = [
     "title",
@@ -46,12 +49,8 @@ exports.fetchArticles = (queries) => {
   ];
 
   if (greenList.includes(sort_by)) {
-    SQLString += ` ORDER BY $1`;
-    args.push(sort_by);
-
-    if (order === "desc" || order === "asc") {
-      SQLString += " " + order;
-    }
+    SQLString += ` ORDER BY $1 ${order === "desc" ? "DESC" : "ASC"}`;
+    args.unshift(sort_by);
   }
 
   return db.query(SQLString, args).then((result) => {

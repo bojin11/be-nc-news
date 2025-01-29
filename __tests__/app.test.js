@@ -263,3 +263,28 @@ describe("/api/articles?sort_by=created_at&order=desc", () => {
       });
   });
 });
+
+describe("/api/articles?topic=mitch", () => {
+  test("responds with 200 and an array of objects which have required properties filtered by the given colour", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.articles.length).toEqual(12);
+        body.articles.forEach((element) => {
+          expect(element).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
