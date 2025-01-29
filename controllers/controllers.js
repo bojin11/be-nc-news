@@ -7,6 +7,7 @@ const {
   fetchArticleComments,
   postComment,
   updateArticleById,
+  deleteComment,
 } = require("../models/models");
 
 exports.getEndPoints = (req, res) => {
@@ -97,4 +98,17 @@ exports.updateArticleVotes = (req, res, next) => {
       res.status(200).json({ article: updatedArticle });
     })
     .catch(next);
+};
+
+exports.deleteCommentById = (req, res, next) => {
+  const comment_id = req.params.comment_id;
+
+  deleteComment(comment_id)
+    .then(() => {
+      res.status(204).send();
+    })
+    .catch((err) => {
+      console.error("Error delete comment", err);
+      next(err);
+    });
 };
