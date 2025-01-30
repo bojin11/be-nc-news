@@ -18,9 +18,31 @@ exports.fetchTopics = () => {
     });
 };
 
-exports.fetchArticleFromArticleId = (id) => {
-  let SQLString = `SELECT * FROM articles WHERE article_id = ${id}`;
-  return db.query(SQLString).then((result) => {
+exports.fetchArticleFromArticleId = (article_id) => {
+  const SQLString = `
+  SELECT 
+    a.article_id,
+    a.title, 
+    a.topic, 
+    a.author, 
+    a.body, 
+    a.created_at, 
+    a.votes, 
+    a.article_img_url, 
+    COUNT(c.comment_id) AS comment_count
+  FROM 
+    articles a
+  LEFT JOIN 
+    comments c 
+  ON 
+    a.article_id = c.article_id
+  WHERE 
+    a.article_id = $1
+  GROUP BY 
+    a.article_id;
+`;
+  const values = [article_id];
+  return db.query(SQLString, values).then((result) => {
     if (result.rows.length === 0) {
       return Promise.reject();
     } else {
@@ -62,9 +84,10 @@ exports.fetchArticles = ({ sort_by = "created_at", order = "desc", topic }) => {
   });
 };
 
-exports.fetchArticleComments = (id) => {
-  let SQLString = `SELECT * FROM comments JOIN articles ON articles.article_id = comments.article_id where articles.article_id = ${id}`;
-  return db.query(SQLString).then((result) => {
+exports.fetchArticleComments = (article_id) => {
+  let SQLString = `SELECT * FROM comments JOIN articles ON articles.article_id = comments.article_id where articles.article_id = $1`;
+  const values = [article_id];
+  return db.query(SQLString, values).then((result) => {
     if (result.rows.length === 0) {
       return Promise.reject();
     } else {
