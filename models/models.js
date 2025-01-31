@@ -85,7 +85,7 @@ exports.fetchArticles = ({ sort_by = "created_at", order = "desc", topic }) => {
 };
 
 exports.fetchArticleComments = (article_id) => {
-  let SQLString = `SELECT * FROM comments JOIN articles ON articles.article_id = comments.article_id where articles.article_id = $1`;
+  let SQLString = `SELECT comments.comment_id, comments.votes, comments.created_at, comments.author, comments.body, articles.article_id FROM comments JOIN articles ON articles.article_id = comments.article_id where articles.article_id = $1`;
   const values = [article_id];
   return db.query(SQLString, values).then((result) => {
     if (result.rows.length === 0) {
