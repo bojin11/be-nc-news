@@ -51,39 +51,6 @@ exports.fetchArticleFromArticleId = (article_id) => {
   });
 };
 
-// exports.fetchArticles = ({ sort_by = "created_at", order = "desc", topic }) => {
-//   let SQLString = "SELECT * FROM articles";
-//   args = [];
-
-//   if (topic) {
-//     SQLString += ` WHERE topic = $2`;
-//     args.push(topic);
-//   }
-
-//   const greenList = [
-//     "title",
-//     "topic",
-//     "author",
-//     "body",
-//     "created_at",
-//     "votes",
-//     "article_img_url",
-//   ];
-
-//   if (greenList.includes(sort_by)) {
-//     SQLString += ` ORDER BY $1 ${order === "desc" ? "DESC" : "ASC"}`;
-//     args.unshift(sort_by);
-//   }
-
-//   return db.query(SQLString, args).then((result) => {
-//     if (result.length === 0) {
-//       return Promise.reject();
-//     } else {
-//       return result.rows;
-//     }
-//   });
-// };
-
 exports.fetchArticles = ({ sort_by = "created_at", order = "desc", topic }) => {
   let SQLString = `SELECT * FROM articles`;
   const args = [];
